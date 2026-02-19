@@ -1,12 +1,13 @@
 {
-  "homepage": "https://konstantinpytlev.github.io/ams",
+  "homepage": "https://Rigoletti.github.io/ams",
   "name": "ams",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
+"scripts": {
   "dev": "vite",
   "build": "vite build",
+  "lint": "eslint .",
   "preview": "vite preview",
   "predeploy": "npm run build",
   "deploy": "gh-pages -d dist"

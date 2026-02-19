@@ -21,6 +21,16 @@ function ScrollToTop() {
 function App() {
   const location = useLocation();
 
+  // Проверяем, есть ли сохраненный путь для редиректа
+  useEffect(() => {
+    const redirectPath = sessionStorage.getItem('redirect');
+    if (redirectPath && redirectPath !== '/') {
+      sessionStorage.removeItem('redirect');
+      // Здесь можно добавить логику для обработки сохраненного пути
+      console.log('Should redirect to:', redirectPath);
+    }
+  }, []);
+
   return (
     <div className="App">
       <Header />
@@ -38,8 +48,9 @@ function App() {
 }
 
 function AppWrapper() {
+
   return (
-    <Router>
+    <Router basename="/ams">
       <App />
     </Router>
   );

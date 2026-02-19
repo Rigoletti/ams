@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ams</title>
+    <script>
+      // Перенаправляем на главную с сохранением пути
+      const path = location.pathname.replace('/ams', '');
+      sessionStorage.redirect = path;
+      location.href = '/ams/';
+    </script>
+  </head>
+  <body>
+    <a href="/ams/">Перейти на главную</a>
+  </body>
+</html>

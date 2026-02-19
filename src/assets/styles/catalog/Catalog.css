@@ -1377,3 +1377,213 @@
     padding: 1.5rem;
   }
 }
+
+/* ========== УЛУЧШЕНИЯ ДЛЯ КАРТИНОК НА МОБИЛЬНЫХ ========== */
+@media (max-width: 768px) {
+  /* Увеличиваем контейнеры изображений */
+  .product-image-container {
+    height: 320px !important;
+  }
+  
+  .gallery-main {
+    height: 400px !important;
+  }
+  
+  .modal-gallery {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Делаем картинки еще больше на маленьких экранах */
+  .product-image-container {
+    height: 280px !important;
+  }
+  
+  .gallery-main {
+    height: 350px !important;
+  }
+  
+  /* Убираем лишние элементы, чтобы освободить место для картинок */
+  .product-advantages {
+    display: none !important;
+  }
+  
+  .product-features {
+    margin-bottom: 1rem !important;
+  }
+  
+  .features-title {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .features-list {
+    gap: 0.5rem !important;
+  }
+  
+  .feature-item {
+    font-size: 0.9rem !important;
+  }
+  
+  .product-tags {
+    margin-bottom: 1rem !important;
+  }
+  
+  .tag {
+    padding: 0.3rem 0.7rem !important;
+    font-size: 0.75rem !important;
+  }
+  
+  /* Упрощаем футер карточки */
+  .product-footer {
+    padding: 1rem 1.25rem !important;
+  }
+  
+  .specs-preview {
+    gap: 0.25rem !important;
+  }
+  
+  .spec-preview-item {
+    font-size: 0.8rem !important;
+  }
+  
+  .view-details {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+  }
+  
+  /* Улучшаем модальное окно */
+  .product-modal {
+    max-height: 95vh !important;
+  }
+  
+  .modal-content {
+    padding: 1rem !important;
+  }
+  
+  .modal-gallery {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Делаем навигацию по галерее более удобной */
+  .gallery-nav {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  
+  .gallery-prev {
+    left: 0.75rem !important;
+  }
+  
+  .gallery-next {
+    right: 0.75rem !important;
+  }
+  
+  .gallery-counter {
+    bottom: 0.75rem !important;
+    padding: 0.4rem 1rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  /* Улучшаем миниатюры */
+  .gallery-thumbnails {
+    gap: 0.5rem !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  .thumbnail {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  
+  /* Скрываем менее важные секции в модальном окне */
+  .modal-section.modal-features,
+  .modal-section.modal-tags {
+    display: none !important;
+  }
+  
+  /* Оставляем только важное */
+  .modal-details-grid {
+    gap: 1rem !important;
+    margin-top: 1.5rem !important;
+  }
+  
+  .modal-section {
+    padding: 1.25rem !important;
+  }
+  
+  .modal-section h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .advantages-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+  
+  .advantage-card {
+    padding: 1rem !important;
+  }
+  
+  .advantage-icon-wrapper {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  .advantage-text {
+    font-size: 0.85rem !important;
+  }
+  
+  .specs-list {
+    gap: 0.75rem !important;
+  }
+  
+  .spec-item {
+    font-size: 0.9rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 360px) {
+  .product-image-container {
+    height: 240px !important;
+  }
+  
+  .gallery-main {
+    height: 300px !important;
+  }
+  
+  .thumbnail {
+    width: 55px !important;
+    height: 55px !important;
+  }
+  
+  .advantages-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .modal-section.modal-advantages {
+    padding: 1rem !important;
+  }
+}
+
+/* Улучшения для сенсорного управления */
+@media (hover: none) and (pointer: coarse) {
+  .gallery-nav {
+    background: rgba(0, 0, 0, 0.7) !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  .thumbnail {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .view-details {
+    padding: 0.75rem 1.25rem !important;
+  }
+}
