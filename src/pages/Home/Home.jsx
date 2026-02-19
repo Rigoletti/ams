@@ -22,6 +22,7 @@ import {
   Sun
 } from 'lucide-react';
 import '../../assets/styles/home/Home.css';
+import { Link } from 'react-router-dom';
 
 // Импорт изображений для всех направлений (только по 3 фото)
 import construction1 from '../../assets/img/construction/1.webp';
@@ -376,15 +377,18 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <motion.a 
-                href="/catalog"
-                className="btn-primary hero-cta"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span>Смотреть проекты</span>
-                <ArrowUpRight size={24} />
-              </motion.a>
+              <motion.div
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.98 }}
+>
+  <Link 
+    to="/catalog"
+    className="btn-primary hero-cta"
+  >
+    <span>Смотреть проекты</span>
+    <ArrowUpRight size={24} />
+  </Link>
+</motion.div>
             </motion.div>
           </motion.div>
 
