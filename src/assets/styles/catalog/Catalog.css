@@ -1472,23 +1472,27 @@
     font-size: 0.9rem !important;
   }
   
-  /* Улучшаем футер карточки */
+  /* Улучшаем футер карточки - убираем кнопку Подробнее */
   .product-footer {
     padding: 1.25rem 1.5rem !important;
+    justify-content: center !important;
   }
   
   .specs-preview {
-    gap: 0.5rem !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    gap: 1rem !important;
   }
   
   .spec-preview-item {
     font-size: 0.95rem !important;
+    text-align: center !important;
   }
   
   .view-details {
-    padding: 0.75rem 1.25rem !important;
-    font-size: 1rem !important;
-    min-height: 48px !important;
+    display: none !important;
   }
 }
 
@@ -1536,9 +1540,11 @@
     font-size: 1rem !important;
   }
   
-  .view-details {
-    font-size: 1.05rem !important;
-    padding: 0.85rem 1.5rem !important;
+  /* Располагаем характеристики в колонку на маленьких экранах */
+  .specs-preview {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
   }
 }
 
@@ -1818,7 +1824,6 @@
     height: 100px !important;
   }
   
-  .view-details,
   .modal-close,
   .gallery-nav,
   .thumbnail {
@@ -1830,7 +1835,6 @@
   .advantage-card:hover,
   .category-filter:hover,
   .btn:hover,
-  .view-details:hover,
   .gallery-nav:hover,
   .modal-close:hover,
   .thumbnail:hover {
@@ -1838,7 +1842,6 @@
   }
   
   /* Добавляем активные состояния при нажатии */
-  .view-details:active,
   .gallery-nav:active,
   .thumbnail:active,
   .modal-close:active {
