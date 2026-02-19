@@ -526,51 +526,6 @@ const Catalog = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="catalog-cta">
-        <div className="container">
-          <motion.div 
-            className="cta-content"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className="cta-badge">
-              <Award size={20} />
-              <span>Профессиональный подход</span>
-            </div>
-            
-            <h2>Интересует конкретное направление?</h2>
-            <p className="cta-description">
-              Посмотрите полное портфолио наших работ по каждому направлению и 
-              ознакомьтесь с подробным описанием услуг
-            </p>
-            
-            <div className="cta-actions">
-              <motion.a 
-                href="/portfolio"
-                className="btn btn-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>Смотреть портфолио</span>
-                <ExternalLink size={20} />
-              </motion.a>
-              
-              <motion.button 
-                className="btn btn-secondary"
-                onClick={scrollToContacts}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>Связаться с нами</span>
-                <ArrowRight size={20} />
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Модальное окно продукта */}
       <AnimatePresence>
