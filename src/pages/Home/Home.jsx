@@ -518,7 +518,7 @@ const Home = () => {
                     )}
                     
                     <motion.a 
-                      href="/catalog"
+                      href="/ams/catalog"
                       className="btn-secondary"
                       whileHover={{ x: 10 }}
                       style={{ background: industries[activeIndustry].gradient }}
