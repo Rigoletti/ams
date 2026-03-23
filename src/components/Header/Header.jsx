@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Phone, Mail } from 'lucide-react';
 import logoImg from '../../assets/img/logo.png';
 import '../../assets/styles/layout/Header.css';
 
@@ -89,6 +90,17 @@ const Header = () => {
               </motion.div>
             ))}
           </nav>
+
+          <div className="header-contacts">
+            <a className="header-contact-link" href="tel:+79874204900" aria-label="Позвонить">
+              <Phone size={14} />
+              <span>+7 (987) 420-49-00</span>
+            </a>
+            <a className="header-contact-link" href="mailto:rpf_a@mail.ru" aria-label="Написать на почту">
+              <Mail size={14} />
+              <span>rpf_a@mail.ru</span>
+            </a>
+          </div>
 
           <motion.button 
             className={`mobile-toggle ${isMobileMenuOpen ? 'active' : ''}`}

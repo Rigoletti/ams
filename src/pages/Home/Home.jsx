@@ -24,32 +24,51 @@ import {
 import '../../assets/styles/home/Home.css';
 import { Link } from 'react-router-dom';
 
-// Импорт изображений для всех направлений (только по 3 фото)
-import construction1 from '../../assets/img/construction/1.webp';
-import construction2 from '../../assets/img/construction/2.webp';
-import construction3 from '../../assets/img/construction/3.webp';
+const sortImageEntries = (entries) =>
+  [...entries].sort(([pathA], [pathB]) => {
+    const fileA = pathA.split('/').pop() || '';
+    const fileB = pathB.split('/').pop() || '';
+    const numA = Number((fileA.match(/^(\d+)/) || [])[1] || Number.POSITIVE_INFINITY);
+    const numB = Number((fileB.match(/^(\d+)/) || [])[1] || Number.POSITIVE_INFINITY);
 
-import metalstructure1 from '../../assets/img/metalstructure/1.webp';
-import metalstructure2 from '../../assets/img/metalstructure/2.webp';
-import metalstructure3 from '../../assets/img/metalstructure/3.webp';
+    if (numA !== numB) return numA - numB;
+    return fileA.localeCompare(fileB);
+  });
 
-import facades1 from '../../assets/img/facades/1.webp';
-import facades2 from '../../assets/img/facades/2.webp';
-import facades3 from '../../assets/img/facades/3.webp';
+const imagesFromGlob = (globResult) =>
+  sortImageEntries(Object.entries(globResult)).map(([, url]) => url);
 
-import art1 from '../../assets/img/art/1.webp';
-import art2 from '../../assets/img/art/2.webp';
-import art3 from '../../assets/img/art/3.webp';
+const allHomeImages = import.meta.glob('../../assets/img/**/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default'
+});
 
-import stel1 from '../../assets/img/stel/1.webp';
-import stel2 from '../../assets/img/stel/2.webp';
-import stel3 from '../../assets/img/stel/3.webp';
+const imagesFromFolder = (folderName) =>
+  imagesFromGlob(
+    Object.fromEntries(
+      Object.entries(allHomeImages).filter(([path]) => path.includes(`/${folderName}/`))
+    )
+  );
 
-import vhod_grup1 from '../../assets/img/vhod_grup/1.webp';
-import vhod_grup2 from '../../assets/img/vhod_grup/2.webp';
-import vhod_grup3 from '../../assets/img/vhod_grup/3.webp';
+const imagesByFolderKeywords = (keywords) =>
+  imagesFromGlob(
+    Object.fromEntries(
+      Object.entries(allHomeImages).filter(([path]) =>
+        keywords.every((keyword) => path.includes(keyword))
+      )
+    )
+  );
 
-import cards1 from '../../assets/img/cards/1.webp';
+const industryImagesMap = {
+  construction: imagesFromFolder('construction'),
+  metalwork: imagesFromFolder('metalstructure'),
+  facades: imagesFromFolder('facades'),
+  entrance: imagesFromFolder('5. Входные группы, навесы, ограждения'),
+  pavilions: imagesByFolderKeywords(['6.', 'Остановочные', 'павильоны', 'КПП']),
+  outdoorFurniture: imagesFromFolder('7. Скамейки, беседки, урны, инструментальные столы'),
+  steles: imagesFromFolder('stel'),
+  artobjects: imagesFromFolder('art')
+};
 
 const Home = () => {
   const [activeIndustry, setActiveIndustry] = useState(0);
@@ -63,53 +82,12 @@ const Home = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.05]);
 
-  // Функция для получения изображений по категории (только по 3 фото)
-  const getIndustryImages = (category) => {
-    switch(category) {
-      case 'Строительство':
-        return [
-          { src: construction1, alt: 'Строительные работы 1' },
-          { src: construction2, alt: 'Строительные работы 2' },
-          { src: construction3, alt: 'Строительные работы 3' }
-        ];
-      case 'Металлоконструкции':
-        return [
-          { src: metalstructure1, alt: 'Металлоконструкции 1' },
-          { src: metalstructure2, alt: 'Металлоконструкции 2' },
-          { src: metalstructure3, alt: 'Металлоконструкции 3' }
-        ];
-      case 'Обшивка фасадов':
-        return [
-          { src: facades1, alt: 'Фасадные работы 1' },
-          { src: facades2, alt: 'Фасадные работы 2' },
-          { src: facades3, alt: 'Фасадные работы 3' }
-        ];
-      case 'Входные группы, навесы':
-        return [
-          { src: vhod_grup1, alt: 'Входная группа 1' },
-          { src: vhod_grup2, alt: 'Входная группа 2' },
-          { src: vhod_grup3, alt: 'Входная группа 3' }
-        ];
-      case 'Стелы':
-        return [
-          { src: stel1, alt: 'Стела 1' },
-          { src: stel2, alt: 'Стела 2' },
-          { src: stel3, alt: 'Стела 3' }
-        ];
-      case 'Артобъекты':
-        return [
-          { src: art1, alt: 'Арт-объект 1' },
-          { src: art2, alt: 'Арт-объект 2' },
-          { src: art3, alt: 'Арт-объект 3' }
-        ];
-      case 'Таблички':
-        return [
-          { src: cards1, alt: 'Табличка 1' }
-        ];
-      default:
-        return [];
-    }
-  };
+  // На главной показываем только первые 3 фото на направление
+  const getIndustryImages = (industry) =>
+    (industryImagesMap[industry.categoryId] || []).slice(0, 3).map((src, idx) => ({
+      src,
+      alt: `${industry.title} ${idx + 1}`
+    }));
 
   const heroStats = [
     { value: '12+', label: 'Лет опыта', icon: <Clock /> },
@@ -120,6 +98,7 @@ const Home = () => {
   const industries = [
     {
       id: 0,
+      categoryId: 'construction',
       title: 'Строительство',
       icon: <Building2 />,
       description: 'Полный цикл строительных работ от проектирования до сдачи объекта под ключ',
@@ -134,6 +113,7 @@ const Home = () => {
     },
     {
       id: 1,
+      categoryId: 'metalwork',
       title: 'Металлоконструкции',
       icon: <Factory />,
       description: 'Изготовление и монтаж металлических конструкций любой сложности по индивидуальным чертежам',
@@ -148,6 +128,7 @@ const Home = () => {
     },
     {
       id: 2,
+      categoryId: 'facades',
       title: 'Обшивка фасадов',
       icon: <PanelTop />,
       description: 'Современные решения для наружной отделки зданий с гарантией качества',
@@ -162,10 +143,11 @@ const Home = () => {
     },
     {
       id: 3,
-      title: 'Входные группы, навесы',
+      categoryId: 'entrance',
+      title: 'Входные группы, навесы и ограждения',
       icon: <DoorOpen />,
-      description: 'Проектирование и изготовление входных групп, козырьков и навесов любой сложности',
-      projects: ['Входные группы', 'Козырьки', 'Навесы для авто', 'Тентовые конструкции'],
+      description: 'Проектирование и изготовление входных групп, козырьков, навесов и ограждений любой сложности',
+      projects: ['Входные группы', 'Козырьки', 'Навесы', 'Ограждения'],
       color: '#4CC9F0',
       gradient: 'linear-gradient(135deg, #4CC9F0 0%, #56CFE1 100%)',
       features: [
@@ -176,6 +158,37 @@ const Home = () => {
     },
     {
       id: 4,
+      categoryId: 'pavilions',
+      title: 'Остановочные павильоны, КПП',
+      icon: <Building2 />,
+      description: 'Изготовление и монтаж остановочных павильонов и контрольно-пропускных пунктов под требования объекта',
+      projects: ['Остановочные павильоны', 'КПП', 'Металлокаркас', 'Монтаж на объекте'],
+      color: '#2A9D8F',
+      gradient: 'linear-gradient(135deg, #2A9D8F 0%, #4DB6AC 100%)',
+      features: [
+        { icon: <Building2 />, text: 'Надежная конструкция' },
+        { icon: <Shield />, text: 'Вандалостойкость' },
+        { icon: <Clock />, text: 'Быстрый монтаж' }
+      ]
+    },
+    {
+      id: 5,
+      categoryId: 'outdoorFurniture',
+      title: 'Скамейки, беседки, урны и инструментальные столы',
+      icon: <Users />,
+      description: 'Производство уличной мебели и малых архитектурных форм для благоустройства пространств',
+      projects: ['Скамейки', 'Беседки', 'Урны', 'Инструментальные столы'],
+      color: '#6A994E',
+      gradient: 'linear-gradient(135deg, #6A994E 0%, #90BE6D 100%)',
+      features: [
+        { icon: <Users />, text: 'Удобство эксплуатации' },
+        { icon: <Shield />, text: 'Износостойкость' },
+        { icon: <Sparkles />, text: 'Современный дизайн' }
+      ]
+    },
+    {
+      id: 6,
+      categoryId: 'steles',
       title: 'Стелы',
       icon: <MapPin />,
       description: 'Изготовление архитектурно-художественных стел и въездных знаков',
@@ -189,7 +202,8 @@ const Home = () => {
       ]
     },
     {
-      id: 5,
+      id: 7,
+      categoryId: 'artobjects',
       title: 'Артобъекты',
       icon: <Palette />,
       description: 'Создание уникальных художественных конструкций из металла по вашим эскизам',
@@ -202,20 +216,6 @@ const Home = () => {
         { icon: <Award />, text: 'Эксклюзивность' }
       ]
     },
-    {
-      id: 6,
-      title: 'Таблички',
-      icon: <MapPin />,
-      description: 'Изготовление адресных, информационных и рекламных табличек из высококачественных материалов',
-      projects: ['Адресные таблички', 'Навигационные указатели', 'Информационные стелы', 'Брендирование'],
-      color: '#00B4D8',
-      gradient: 'linear-gradient(135deg, #00B4D8 0%, #4CC9F0 100%)',
-      features: [
-        { icon: <MapPin />, text: 'Четкость нанесения' },
-        { icon: <Shield />, text: 'Долговечность' },
-        { icon: <Clock />, text: 'Быстрое изготовление' }
-      ]
-    }
   ];
 
   const process = [
@@ -517,20 +517,24 @@ const Home = () => {
                       </ul>
                     )}
                     
-                    <motion.a 
-                      href="/ams/catalog"
-                      className="btn-secondary"
-                      whileHover={{ x: 10 }}
-                      style={{ background: industries[activeIndustry].gradient }}
-                    >
-                      <span>Смотреть больше проектов</span>
-                      <ChevronRight />
-                    </motion.a>
+                  <motion.div
+  whileHover={{ x: 10 }}
+  style={{ display: 'inline-block' }}
+>
+  <Link 
+    to="/catalog"
+    className="btn-secondary"
+    style={{ background: industries[activeIndustry].gradient }}
+  >
+    <span>Смотреть больше проектов</span>
+    <ChevronRight />
+  </Link>
+</motion.div>
                   </div>
                   
                   <div className="industry-visual">
                     <div className="industry-gallery">
-                      {getIndustryImages(industries[activeIndustry].title).map((image, index) => (
+                      {getIndustryImages(industries[activeIndustry]).map((image, index) => (
                         <motion.div
                           key={index}
                           className="gallery-image-container"

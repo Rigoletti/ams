@@ -26,52 +26,49 @@ import {
 } from 'lucide-react';
 import '../../assets/styles/catalog/Catalog.css';
 
-// Импорт изображений для всех направлений
-import construction1 from '../../assets/img/construction/1.webp';
-import construction2 from '../../assets/img/construction/2.webp';
-import construction3 from '../../assets/img/construction/3.webp';
-import construction4 from '../../assets/img/construction/4.webp';
-import construction5 from '../../assets/img/construction/5.webp';
+const sortImageEntries = (entries) =>
+  [...entries].sort(([pathA], [pathB]) => {
+    const fileA = pathA.split('/').pop() || '';
+    const fileB = pathB.split('/').pop() || '';
+    const numA = Number((fileA.match(/^(\d+)/) || [])[1] || Number.POSITIVE_INFINITY);
+    const numB = Number((fileB.match(/^(\d+)/) || [])[1] || Number.POSITIVE_INFINITY);
 
-import metalstructure1 from '../../assets/img/metalstructure/1.webp';
-import metalstructure2 from '../../assets/img/metalstructure/2.webp';
-import metalstructure3 from '../../assets/img/metalstructure/3.webp';
-import metalstructure4 from '../../assets/img/metalstructure/4.webp';
-import metalstructure5 from '../../assets/img/metalstructure/5.webp';
+    if (numA !== numB) return numA - numB;
+    return fileA.localeCompare(fileB);
+  });
 
-import facades1 from '../../assets/img/facades/1.webp';
-import facades2 from '../../assets/img/facades/2.webp';
-import facades3 from '../../assets/img/facades/3.webp';
-import facades4 from '../../assets/img/facades/4.webp';
-import facades5 from '../../assets/img/facades/5.webp';
+const imagesFromGlob = (globResult) =>
+  sortImageEntries(Object.entries(globResult)).map(([, url]) => url);
 
-import art1 from '../../assets/img/art/1.webp';
-import art2 from '../../assets/img/art/2.webp';
-import art3 from '../../assets/img/art/3.webp';
-import art4 from '../../assets/img/art/4.webp';
-import art5 from '../../assets/img/art/5.webp';
-import art6 from '../../assets/img/art/6.webp';
-import art7 from '../../assets/img/art/7.webp';
-import art8 from '../../assets/img/art/8.webp';
-import art9 from '../../assets/img/art/9.webp';
-import art10 from '../../assets/img/art/10.webp';
-import art11 from '../../assets/img/art/11.webp';
-import art12 from '../../assets/img/art/12.webp';
-import art13 from '../../assets/img/art/13.webp';
-import art14 from '../../assets/img/art/14.webp';
-import art15 from '../../assets/img/art/15.webp';
+const allCatalogImages = import.meta.glob('../../assets/img/**/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default'
+});
 
-import stel1 from '../../assets/img/stel/1.webp';
-import stel2 from '../../assets/img/stel/2.webp';
-import stel3 from '../../assets/img/stel/3.webp';
+const imagesFromFolder = (folderName) =>
+  imagesFromGlob(
+    Object.fromEntries(
+      Object.entries(allCatalogImages).filter(([path]) => path.includes(`/${folderName}/`))
+    )
+  );
 
-import vhod_grup1 from '../../assets/img/vhod_grup/1.webp';
-import vhod_grup2 from '../../assets/img/vhod_grup/2.webp';
-import vhod_grup3 from '../../assets/img/vhod_grup/3.webp';
-import vhod_grup4 from '../../assets/img/vhod_grup/4.webp';
-import vhod_grup5 from '../../assets/img/vhod_grup/5.webp';
+const imagesByFolderKeywords = (keywords) =>
+  imagesFromGlob(
+    Object.fromEntries(
+      Object.entries(allCatalogImages).filter(([path]) =>
+        keywords.every((keyword) => path.includes(keyword))
+      )
+    )
+  );
 
-import cards1 from '../../assets/img/cards/1.webp';
+const constructionImages = imagesFromFolder('construction');
+const metalworkImages = imagesFromFolder('metalstructure');
+const facadesImages = imagesFromFolder('facades');
+const entranceGroupsImages = imagesFromFolder('5. Входные группы, навесы, ограждения');
+const pavilionsImages = imagesByFolderKeywords(['6.', 'Остановочные', 'павильоны', 'КПП']);
+const outdoorFurnitureImages = imagesFromFolder('7. Скамейки, беседки, урны, инструментальные столы');
+const stelesImages = imagesFromFolder('stel');
+const artImages = imagesFromFolder('art');
 
 const Catalog = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -110,10 +107,24 @@ const Catalog = () => {
     },
     { 
       id: 'entrance', 
-      name: 'Входные группы, навесы', 
+      name: 'Входные группы, навесы и ограждения', 
       icon: <DoorOpen />, 
       color: '#FF9E00',
       gradient: 'linear-gradient(135deg, #FF9E00 0%, #FFB700 100%)'
+    },
+    { 
+      id: 'pavilions', 
+      name: 'Остановочные павильоны, КПП', 
+      icon: <Building />, 
+      color: '#2A9D8F',
+      gradient: 'linear-gradient(135deg, #2A9D8F 0%, #4DB6AC 100%)'
+    },
+    { 
+      id: 'outdoorFurniture', 
+      name: 'Скамейки, беседки, урны и инструментальные столы', 
+      icon: <Users />, 
+      color: '#6A994E',
+      gradient: 'linear-gradient(135deg, #6A994E 0%, #90BE6D 100%)'
     },
     { 
       id: 'steles', 
@@ -129,31 +140,26 @@ const Catalog = () => {
       color: '#4CC9F0',
       gradient: 'linear-gradient(135deg, #4CC9F0 0%, #56CFE1 100%)'
     },
-    { 
-      id: 'signage', 
-      name: 'Таблички металлические', 
-      icon: <MapPin />, 
-      color: '#00B4D8',
-      gradient: 'linear-gradient(135deg, #00B4D8 0%, #4CC9F0 100%)'
-    }
   ];
 
   const getProductImages = (category) => {
     switch(category) {
       case 'construction':
-        return [construction1, construction2, construction3, construction4, construction5];
+        return constructionImages;
       case 'metalwork':
-        return [metalstructure1, metalstructure2, metalstructure3, metalstructure4, metalstructure5];
+        return metalworkImages;
       case 'facades':
-        return [facades1, facades2, facades3, facades4, facades5];
+        return facadesImages;
       case 'entrance':
-        return [vhod_grup1, vhod_grup2, vhod_grup3, vhod_grup4, vhod_grup5];
+        return entranceGroupsImages;
+      case 'pavilions':
+        return pavilionsImages;
+      case 'outdoorFurniture':
+        return outdoorFurnitureImages;
       case 'steles':
-        return [stel1, stel2, stel3];
+        return stelesImages;
       case 'artobjects':
-        return [art1, art2, art3, art4, art5, art6, art7, art8, art9, art10, art11, art12, art13, art14, art15];
-      case 'signage':
-        return [cards1];
+        return artImages;
       default:
         return [];
     }
@@ -225,13 +231,13 @@ const Catalog = () => {
     },
     {
       id: 4,
-      name: 'Входные группы и навесы',
+      name: 'Входные группы, навесы и ограждения',
       category: 'entrance',
-      description: 'Проектирование и изготовление входных групп, козырьков и навесов любой сложности',
-      features: ['Входные группы', 'Козырьки', 'Навесы для авто', 'Тентовые конструкции'],
+      description: 'Проектирование и изготовление входных групп, козырьков, навесов и ограждений любой сложности',
+      features: ['Входные группы', 'Козырьки', 'Навесы', 'Ограждения'],
       specs: { 
         'Материалы': 'Металл, Поликарбонат', 
-        'Типы': 'Козырьки, Навесы, Тенты', 
+        'Типы': 'Козырьки, Навесы, Ограждения', 
         'Размеры': 'Любые',
         'Дизайн': 'Индивидуальный'
       },
@@ -241,8 +247,50 @@ const Catalog = () => {
         { icon: <Sun />, text: 'Защита от осадков' },
         { icon: <Sparkles />, text: 'Эстетичный внешний вид' }
       ],
-      tags: ['Входные группы', 'Навесы', 'Козырьки'],
+      tags: ['Входные группы', 'Навесы', 'Ограждения'],
       images: getProductImages('entrance')
+    },
+    {
+      id: 8,
+      name: 'Остановочные павильоны и КПП',
+      category: 'pavilions',
+      description: 'Изготовление и монтаж остановочных павильонов и контрольно-пропускных пунктов с учетом требований объекта',
+      features: ['Остановочные павильоны', 'КПП', 'Металлокаркас', 'Монтаж на объекте'],
+      specs: { 
+        'Материалы': 'Металл, Стекло, Поликарбонат', 
+        'Назначение': 'Городская среда, Промзоны, Частные объекты', 
+        'Комплектация': 'Под ключ',
+        'Срок изготовления': 'По проекту'
+      },
+      advantages: [
+        { icon: <Building />, text: 'Надежная конструкция' },
+        { icon: <Shield />, text: 'Вандалостойкость' },
+        { icon: <Clock />, text: 'Быстрый монтаж' },
+        { icon: <Award />, text: 'Соответствие требованиям' }
+      ],
+      tags: ['Павильоны', 'КПП', 'Металлоконструкции'],
+      images: getProductImages('pavilions')
+    },
+    {
+      id: 9,
+      name: 'Скамейки, беседки, урны и инструментальные столы',
+      category: 'outdoorFurniture',
+      description: 'Производство уличной мебели и малых архитектурных форм для благоустройства общественных и частных пространств',
+      features: ['Скамейки', 'Беседки', 'Урны', 'Инструментальные столы'],
+      specs: { 
+        'Материалы': 'Металл, Дерево, Композит', 
+        'Применение': 'Парки, Дворы, Производственные площадки', 
+        'Покрытие': 'Антикоррозийное',
+        'Исполнение': 'Серийное и индивидуальное'
+      },
+      advantages: [
+        { icon: <Users />, text: 'Удобство эксплуатации' },
+        { icon: <Shield />, text: 'Износостойкость' },
+        { icon: <Sparkles />, text: 'Современный дизайн' },
+        { icon: <Clock />, text: 'Долгий срок службы' }
+      ],
+      tags: ['Скамейки', 'Беседки', 'Урны'],
+      images: getProductImages('outdoorFurniture')
     },
     {
       id: 5,
@@ -286,27 +334,6 @@ const Catalog = () => {
       tags: ['Арт', 'Дизайн', 'Скульптуры'],
       images: getProductImages('artobjects')
     },
-    {
-      id: 7,
-      name: 'Металлические таблички',
-      category: 'signage',
-      description: 'Изготовление адресных, информационных и рекламных табличек из высококачественных материалов',
-      features: ['Гравировка', 'Лазерная резка', 'Покраска', 'Монтаж'],
-      specs: { 
-        'Материалы': 'Металл', 
-        'Типы': 'Адресные, Информационные, Рекламные', 
-        'Крепление': 'Различное',
-        'Стойкость': 'К атмосферным воздействиям'
-      },
-      advantages: [
-        { icon: <MapPin />, text: 'Четкость нанесения' },
-        { icon: <Shield />, text: 'Долговечность' },
-        { icon: <Sparkles />, text: 'Современные технологии' },
-        { icon: <Clock />, text: 'Быстрое изготовление' }
-      ],
-      tags: ['Таблички', 'Вывески', 'Информация'],
-      images: getProductImages('signage')
-    }
   ];
 
   // Убрана фильтрация - показываем все продукты
