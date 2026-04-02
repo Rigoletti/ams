@@ -212,7 +212,6 @@ const Home = () => {
       gradient: 'linear-gradient(135deg, #FF9E00 0%, #FFB700 100%)',
       features: [
         { icon: <Palette />, text: 'Дизайн-проект' },
-        { icon: <Sparkles />, text: 'Художественная ковка' },
         { icon: <Award />, text: 'Эксклюзивность' }
       ]
     },
